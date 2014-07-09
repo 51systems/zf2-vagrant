@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+#Install cookbooks using `librarian-chef update`
+
+site 'http://community.opscode.com/api/v1'
+
+#Required Version Pins
+#Build essential requires chef 11, but chef 11 breaks other packages
+cookbook 'build-essential', '~> 1.4.4'
+
+#Packages
+cookbook 'apache2'
+cookbook 'apt'
+cookbook 'git'
+cookbook 'mysql', '~> 3.0.0'
+cookbook 'networking_basic'
+cookbook 'openssl'
+cookbook 'php'
