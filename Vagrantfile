@@ -8,7 +8,10 @@ Vagrant.configure("2") do |config|
       end
       # config.ssh.max_tries = 50
       # config.ssh.timeout   = 300
-      config.vm.synced_folder "../", "/vagrant", :id => "vagrant-root", :owner => "vagrant", :group => "www-data"
+      config.vm.synced_folder "../", "/vagrant", :id => "vagrant-root",
+          :owner => "vagrant",
+          :group => "www-data",
+          :mount_options => ["dmode=775,fmode=664"]
 
       #This can pin the used chef version if required
       #config.omnibus.chef_version = :latest
