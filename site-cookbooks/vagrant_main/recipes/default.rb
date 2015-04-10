@@ -1,6 +1,5 @@
 include_recipe "apt"
 include_recipe "build-essential"
-include_recipe "networking_basic"
 include_recipe "git"
 
 include_recipe "apache2"
@@ -9,10 +8,19 @@ include_recipe "apache2::mod_rewrite"
 include_recipe "apache2::mod_deflate"
 include_recipe "apache2::mod_headers"
 
-include_recipe "mysql::server"
-
 include_recipe "vagrant_main::packages"
 include_recipe "vagrant_main::custom_php"
+
+# Install Mysql
+mysql_service "default" do
+  port node['mysql']['port']
+  version node['mysql']['version']
+  initial_root_password node['mysql']['server_root_password']
+  action [:create, :start]
+end
+mysql_client 'default' do
+  action :create
+end
 
 # Install mysql gem
 gem_package "mysql" do
@@ -24,9 +32,9 @@ ruby_block "Create database + execute grants" do
     require 'rubygems'
     Gem.clear_paths
     require 'mysql'
-    m = Mysql.new("localhost", "root", "")
+    m = Mysql.new("127.0.0.1", "root", node['mysql']['server_root_password'])
     m.query("CREATE DATABASE IF NOT EXISTS app CHARACTER SET utf8")
-    m.query("grant all on `app`.* to 'root'@'10.0.2.2' identified by ''")
+    m.query("grant all on `app`.* to 'root'@'%' identified by '#{Shellwords.escape(node['mysql']['server_root_password'])}'")
     m.reload
   end
 end

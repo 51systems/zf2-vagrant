@@ -5,15 +5,12 @@
 
 site 'http://community.opscode.com/api/v1'
 
-#Required Version Pins
-#Build essential requires chef 11, but chef 11 breaks other packages
-cookbook 'build-essential', '~> 1.4.4'
-
 #Packages
-cookbook 'apache2'
-cookbook 'apt'
-cookbook 'git'
-cookbook 'mysql', '~> 3.0.0'
-cookbook 'networking_basic'
+cookbook 'apache2', '~> 3.0.1'
+cookbook 'apt', '~> 2.6.1'
+cookbook 'build-essential', '~> 2.1.3'
+cookbook 'composer', '~> 2.0.0'
+cookbook 'git', '~> 4.1.0'
+cookbook 'mysql', '~> 6.0.15'
 cookbook 'openssl'
 cookbook 'php'

@@ -5,6 +5,9 @@ require_recipe "php::module_apc"
 require_recipe "php::module_memcache"
 require_recipe "php::module_curl"
 
+# Initialize php extensions list
+php_extensions = []
+
 #using APT
 package "php-pear" do
   action :install
@@ -26,9 +29,12 @@ execute "PEAR: upgrade all packages" do
   command "pear upgrade-all"
 end
 
-# Install Xdebug
+# install the xdebug pecl
 php_pear "xdebug" do
+  # Specify that xdebug.so must be loaded as a zend extension
+  zend_extensions ['xdebug.so']
   action :install
+  notifies :restart, resources("service[apache2]"), :delayed
 end
 template "#{node['php']['ext_conf_dir']}/xdebug.ini" do
   source "xdebug.ini.erb"
@@ -38,6 +44,7 @@ template "#{node['php']['ext_conf_dir']}/xdebug.ini" do
   action :create
   notifies :restart, resources("service[apache2]"), :delayed
 end
+php_extensions.push "xdebug"
 
 # Install Webgrind
 git "/var/www/webgrind" do
@@ -45,12 +52,8 @@ git "/var/www/webgrind" do
   reference "master"
   action :sync
 end
-template "#{node[:apache][:dir]}/conf.d/webgrind.conf" do
-  source "webgrind.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  action :create
+apache_conf "webgrind" do
+  enable true
   notifies :restart, resources("service[apache2]"), :delayed
 end
 template "/var/www/webgrind/config.php" do
@@ -64,6 +67,19 @@ end
 # Install php-xsl
 package "php5-xsl" do
   action :install
+end
+
+# Enable installed php extensions
+case node['platform']
+  when 'ubuntu'
+    if node['platform_version'].to_f >= 14.04
+      php_extensions.each do |extension|
+        execute 'enable_php_extension' do
+          command "php5enmod #{extension}"
+        end
+      end
+    end
+  else
 end
 
 

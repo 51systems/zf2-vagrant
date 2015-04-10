@@ -1,7 +1,7 @@
 #Vagrant Setup
 
 ##Configuration
-Vagrant is configured using Chef-Solo.
+Vagrant is configured using Chef-Zero.
 
 Some of the cookbooks are taken from https://github.com/r8/vagrant-lamp
 
@@ -15,7 +15,7 @@ vagrant plugin install vagrant-omnibus
 ###Chef Cookbooks
 Vagrant configuration cookbooks are managed using librarian
 
-From the data/vm directory
+From the vagrant directory
 
 Install librarian if necessary
 ```shell
