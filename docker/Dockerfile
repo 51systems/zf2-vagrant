@@ -10,6 +10,7 @@ ADD start-sshd.sh /start-sshd.sh
 ADD shutdown /sbin/shutdown
 ADD run.sh /run.sh
 ADD firstrun.sh /firstrun.sh
+ADD fix_group.sh /fix_group.sh
 RUN chmod 755 /*.sh
 ADD php.ini /etc/php5/apache2/php.ini
 ADD xdebug.ini /etc/php5/apache2/conf.d/xdebug.ini
@@ -21,7 +22,6 @@ ADD supervisord-sshd.conf /etc/supervisor/conf.d/supervisord-sshd.conf
 # Add MySQL users and `database`
 ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
 ADD install_webgrind.sh /install_webgrind.sh
-ADD install_n98-magerun.sh /install_n98-magerun.sh
 ADD install_composer.sh /install_composer.sh
 RUN chmod 755 /*.sh /sbin/shutdown
 
@@ -31,9 +31,13 @@ ADD apache_webgrind /etc/apache2/sites-enabled/webgrind.conf
 ADD ports.conf /etc/apache2/ports.conf
 RUN a2enmod rewrite headers
 
+# Fix apache group permissions
+RUN /fix_group.sh
+
 # SSHD
 RUN mkdir /var/run/sshd
 RUN echo 'root:vagrant' |chpasswd
+
 RUN /firstrun.sh
 
 EXPOSE 22 80 443 3306 9000

@@ -1,12 +1,12 @@
 <VirtualHost *:*>
         ServerAdmin webmaster@localhost
 
-        DocumentRoot /vagrant
+        DocumentRoot /vagrant/public
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /vagrant>
+        <Directory /vagrant/public>
                 Options Indexes FollowSymLinks MultiViews
                 # To make wordpress .htaccess work
                 AllowOverride All
