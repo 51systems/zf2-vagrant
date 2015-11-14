@@ -8,3 +8,7 @@ fi
 # Modify the www-data group id to match the group id of the local workstation.
 usermod -u 1000 www-data
 groupmod -g 1000 www-data
+
+
+echo "=> Done!"
+touch /.fix_group-installed
