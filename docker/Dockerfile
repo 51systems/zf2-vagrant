@@ -24,6 +24,7 @@ ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
 ADD install_webgrind.sh /install_webgrind.sh
 ADD install_composer.sh /install_composer.sh
 RUN chmod 755 /*.sh /sbin/shutdown
+RUN sed -i -- 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # Apache config
 ADD apache_default /etc/apache2/sites-available/000-default.conf
