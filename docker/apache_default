@@ -1,4 +1,5 @@
 <VirtualHost *:*>
+        SetEnv "APP_ENV" "development"
         ServerAdmin webmaster@localhost
 
         DocumentRoot /vagrant/public
